@@ -13,9 +13,10 @@
 
 .email {
   font-family: var(--font-display);
-  font-size: var(--step-3);
+  font-size: var(--step-2);
   font-weight: 600;
   letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
   background-image: linear-gradient(var(--accent), var(--accent));
   background-size: 0% 2px;
   background-repeat: no-repeat;
