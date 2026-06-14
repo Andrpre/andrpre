@@ -1,0 +1,101 @@
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  gap: var(--space-4);
+}
+
+/* vertical line */
+.entry::before {
+  content: '';
+  position: absolute;
+  left: calc(0.75rem - 0.5px);
+  top: 1.4rem;
+  bottom: -2rem;
+  width: 1px;
+  background: var(--border);
+}
+.timeline > li:last-child .entry::before {
+  display: none;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  margin-top: 0.45rem;
+  margin-left: 0.18rem;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: var(--bg);
+}
+
+.body {
+  padding-bottom: var(--space-2);
+}
+
+.topRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.role {
+  font-size: var(--step-1);
+}
+
+.period {
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.company {
+  color: var(--text-muted);
+  margin-top: 2px;
+  margin-bottom: var(--space-3);
+}
+
+.desc {
+  color: var(--text-muted);
+  max-width: 64ch;
+}
+
+.highlights {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 64ch;
+}
+.highlights li {
+  position: relative;
+  padding-left: var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--step--1);
+}
+.highlights li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.techTag {
+  padding: 2px var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+}

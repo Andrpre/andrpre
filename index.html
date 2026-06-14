@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/andrpre/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+
+    <title>Андрей Кожухов — Frontend Developer</title>
+    <meta
+      name="description"
+      content="Портфолио Андрея Кожухова — frontend-разработчика. React, TypeScript, современные интерфейсы."
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Андрей Кожухов — Frontend Developer" />
+    <meta
+      property="og:description"
+      content="Портфолио frontend-разработчика. React, TypeScript, современные интерфейсы."
+    />
+    <meta property="og:image" content="/andrpre/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap&subset=latin,cyrillic"
+      rel="stylesheet"
+    />
+
+    <!-- Avoid theme flash: set theme before first paint -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme =
+            stored ||
+            (window.matchMedia('(prefers-color-scheme: light)').matches
+              ? 'light'
+              : 'dark');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

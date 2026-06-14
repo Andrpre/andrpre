@@ -1,0 +1,41 @@
+.wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.wrap[data-hidden='true'] {
+  opacity: 0;
+}
+
+.dot,
+.ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--accent);
+}
+
+.ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1.5px solid var(--accent);
+}
+
+/* Hide the native cursor only when the custom one is mounted & active */
+:global(body.custom-cursor),
+:global(body.custom-cursor a),
+:global(body.custom-cursor button) {
+  cursor: none;
+}

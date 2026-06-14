@@ -1,0 +1,22 @@
+.toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.25s var(--ease), color 0.25s var(--ease),
+    background 0.25s var(--ease);
+}
+
+.toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.iconWrap {
+  display: inline-grid;
+  place-items: center;
+}
