@@ -11,7 +11,8 @@ repo is the portfolio site source.
 
 - **Stack:** React 18, TypeScript (strict), Vite 5, Framer Motion 11, CSS Modules.
 - **No CSS framework, no UI kit, no state library** — styling is hand-written CSS with
-  design tokens; the only runtime deps are `react`, `react-dom`, and `framer-motion`.
+  design tokens; runtime deps are kept minimal: `react`, `react-dom`, `framer-motion`,
+  and `@paper-design/shaders-react` (the WebGL mesh-gradient behind the hero).
 - **Language:** UI copy and most code comments are in **Russian**. Keep new
   user-facing text in Russian to match; code identifiers stay in English.
 - **Deploy target:** GitHub Pages at `https://andrpre.github.io/andrpre/`.
