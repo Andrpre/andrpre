@@ -28,12 +28,4 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/Andrpre',
     year: '2023',
   },
-  {
-    title: 'Portfolio Site',
-    description:
-      'Этот сайт: минималистичный портфолио-проект на React + Vite + TypeScript с аккуратными анимациями и переключением темы.',
-    tags: ['React', 'Vite', 'TypeScript', 'Framer Motion'],
-    repoUrl: 'https://github.com/Andrpre/andrpre',
-    year: '2026',
-  },
 ];

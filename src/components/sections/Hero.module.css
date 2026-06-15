@@ -1,12 +1,16 @@
 .hero {
   position: relative;
+  isolation: isolate; /* keep the shader canvas (z-index:-1) scoped to the hero */
   min-height: 100svh;
   display: flex;
   align-items: center;
   padding-top: 4.5rem;
+  overflow: hidden;
 }
 
 .inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -26,6 +30,32 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0 0.3em;
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* Subtle moving sheen: mostly text color with a travelling accent band. */
+  background: linear-gradient(
+    100deg,
+    var(--text) 0%,
+    var(--text) 42%,
+    var(--accent) 50%,
+    var(--text) 58%,
+    var(--text) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: nameSheen 7s var(--ease) infinite;
+}
+
+@keyframes nameSheen {
+  0%,
+  100% {
+    background-position: 130% 50%;
+  }
+  50% {
+    background-position: -30% 50%;
+  }
 }
 
 .wordMask {

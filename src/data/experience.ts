@@ -27,12 +27,4 @@ export const experience: ExperienceItem[] = [
     ],
     tech: ['React', 'JavaScript', 'SASS', 'MUI'],
   },
-  {
-    company: 'E-commerce',
-    role: 'Project Manager / Head of Content',
-    period: 'до 2022',
-    description:
-      'Управление проектами и контентом в e-commerce: руководил командами, выстраивал процессы и взаимодействовал с разработчиками. Здесь начался переход во frontend.',
-    tech: ['Project Management', 'Notion', 'Figma'],
-  },
 ];
