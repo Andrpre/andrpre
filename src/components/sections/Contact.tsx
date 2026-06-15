@@ -2,6 +2,7 @@ import { profile } from '../../data/profile';
 import { Section } from '../ui/Section';
 import { Reveal } from '../ui/Reveal';
 import { MagneticButton } from '../ui/MagneticButton';
+import { ParticleBurst } from '../ui/ParticleBurst';
 import { SocialGlyph } from '../ui/icons';
 import styles from './Contact.module.css';
 
@@ -16,9 +17,11 @@ export function Contact() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <a href={`mailto:${profile.email}`} className={styles.email}>
-            {profile.email}
-          </a>
+          <ParticleBurst>
+            <a href={`mailto:${profile.email}`} className={styles.email}>
+              {profile.email}
+            </a>
+          </ParticleBurst>
         </Reveal>
 
         <Reveal delay={0.18}>

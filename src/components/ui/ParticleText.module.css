@@ -1,0 +1,15 @@
+/* Particle layer pinned over the live <h1> (its relatively-positioned wrapper
+   sizes to the heading, so inset:0 == the heading box). Decorative only. */
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.5s var(--ease);
+}
+
+.faded {
+  opacity: 0;
+}

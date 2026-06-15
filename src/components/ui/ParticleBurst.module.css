@@ -1,0 +1,14 @@
+.wrap {
+  position: relative;
+  display: inline-block;
+}
+
+/* Bleeds beyond the wrapped element (top/left set in JS to -PAD) so sparks can
+   fly past its edges. Never interactive. */
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 3;
+}
