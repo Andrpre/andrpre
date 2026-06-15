@@ -3,9 +3,11 @@ name: stunning-portfolio
 description: >-
   Techniques for building memorable, award-winning personal portfolio and
   business-card ("сайт-визитка") sites — visual direction, motion choreography,
-  WebGL/shader hero centerpieces, performance budgets and accessibility. Use
-  when designing or upgrading a portfolio/landing page that needs a strong
-  "wow" factor while staying fast and accessible.
+  and a curated catalog of ready-made "wow" effect libraries (Paper Shaders,
+  React Bits, GSAP, Vanta, …) plus how to wire a WebGL/shader hero centerpiece,
+  performance budgets and accessibility. Use when designing or upgrading a
+  portfolio/landing page that needs a strong "wow" factor while staying fast and
+  accessible.
 ---
 
 # Stunning portfolio / business-card sites
@@ -13,6 +15,13 @@ description: >-
 A field guide for turning a competent portfolio into one people remember. Bias
 toward **one strong idea executed cleanly** over a pile of effects. Every effect
 must survive the budget and accessibility checks at the bottom.
+
+> **Prefer a battle-tested library over hand-rolled WebGL.** A maintained,
+> popular effect library gives you a polished, declarative, theme-able result
+> for a few lines of code — and avoids the subtle bugs of hand-managing a
+> WebGL context (lost context on theme switch, leaked rAF loops, DPR/resize
+> handling). Reach for raw WebGL/GLSL only when you need something no library
+> offers. **This is the project's current approach** — see §3.
 
 ## 1. Design direction (memorability)
 
@@ -49,40 +58,72 @@ must survive the budget and accessibility checks at the bottom.
   (keyframes, transitions); use JS/Framer Motion for dynamic, state- or
   pointer-dependent motion (springs, `useMotionValue`, `useScroll`).
 
-## 3. WebGL / shader hero (the centerpiece)
+## 3. The "wow" centerpiece — use a ready-made effect library
 
-A fragment-shader background is the highest-impact, lowest-bloat "wow" — raw
-WebGL needs **no dependency** (Three.js/R3F only when you genuinely need 3D
-scenes/geometry).
+A fragment-shader / animated background is the highest-impact "wow". Don't write
+it by hand: pick a maintained library, drive it from your **design tokens**, and
+keep one quiet centerpiece. Selection criteria: popular + actively maintained,
+free to use, declarative (props, not imperative `init/destroy`), theme-able via
+color props, lightweight, and TypeScript-friendly.
 
-Recipe for an organic, interactive field:
+### Catalog of ready-made libraries (pick one)
 
-- Full-screen triangle + fragment shader; skip vertex math.
-- **Domain-warped fbm noise** (feed value/Perlin noise into itself) for a
-  flowing, liquid look. Tint between the page background and the accent so it
-  stays subtle and text stays legible.
-- **Pointer attractor:** pass a smoothed (eased/lerped) `u_mouse` uniform; have
-  the field brighten / pull toward the cursor.
-- **Theme-driven colors:** read `--bg` / `--accent` from computed styles and
-  pass as uniforms; re-read on theme change.
-- **Mask the edges:** radial vignette + bottom fade (CSS `mask-image` or in-shader
-  alpha) so the hero blends into the page and content below stays readable.
+| Library | Best for | Notes |
+| --- | --- | --- |
+| **[Paper Shaders](https://shaders.paper.design/)** (`@paper-design/shaders-react`) | Token-driven animated shader backgrounds | **What this repo uses.** Zero-dependency WebGL (no three.js), React + TS, fully declarative. Components: `MeshGradient`, `Waves`, `Dithering`, `GodRays`, `Warp`, `Voronoi`, `LiquidMetal`, … Color/`speed`/`distortion`/`swirl` are props → theme switch + reduced-motion are trivial. Source-available license, free for non-competing apps. |
+| **[React Bits](https://reactbits.dev/)** | Drop-in animated backgrounds & components | MIT. OGL/Framer-Motion based (tiny). `Aurora`, `Iridescence`, `Threads`, `Silk`, `Beams`, `Hyperspeed`, tilt/spotlight cards. Distributed by copy-in (CLI/copy-paste) rather than a single npm import. |
+| **[Vanta.js](https://www.vantajs.com/)** | One-call iconic backgrounds | MIT, very recognizable (`FOG`, `WAVES`, `NET`, `BIRDS`). Imperative (`init`/`destroy`; re-init or `setOptions` on theme change) and pulls **three.js** (~120 KB) — heavy for a minimalist stack. |
+| **[GSAP](https://gsap.com/)** | Scroll-driven timelines, kinetic type, SVG | Now free incl. all plugins (ScrollTrigger, SplitText, Flip). The pro tool for choreographed scroll/timeline motion; pairs with any of the above. |
+| **[Magic UI](https://magicui.design/) / [Aceternity UI](https://ui.aceternity.com/)** | shadcn-style animated section blocks | MIT, Tailwind + Framer Motion. Great for spotlight/beam/marquee section effects if you're already on shadcn/Tailwind. |
+| **[Spline](https://spline.design/) / [Unicorn Studio](https://www.unicorn.studio/)** | No-code 3D / shader scenes | Design visually, embed via a runtime/`<iframe>`. Fastest path to a bespoke 3D hero; watch the runtime weight and licensing. |
+| **[Three.js](https://threejs.org/) + [R3F](https://r3f.docs.pmnd.rs/) / [OGL](https://github.com/oframe/ogl)** | Real 3D scenes / geometry | Only when you genuinely need 3D models, physics or custom geometry. OGL is the lightweight middle ground; raw GLSL when nothing else fits. |
+
+### How this repo wires it (Paper Shaders `MeshGradient`)
+
+`src/components/ui/ShaderBackground.tsx` renders a `<MeshGradient>` behind the
+hero. The pattern that makes it robust:
+
+- **Token-driven colors.** Read `--bg`, `--bg-elevated`, `--accent`, `--surface`
+  from `getComputedStyle(document.documentElement)` and pass them as the
+  `colors` prop — `tokens.css` stays the single source of truth, no literals.
+- **Theme switch = prop change (the bug fix).** Don't re-read tokens off the
+  React `theme` value: child effects run *before* the provider's attribute-set
+  effect, so you'd read the previous theme's tokens (a one-toggle color lag, and
+  with hand-rolled WebGL, a lost-context crash). Instead, watch the attribute
+  directly with a `MutationObserver` on `<html data-theme>` and re-read the
+  palette when it flips. Passing new `colors` re-renders declaratively — the
+  library updates its uniforms; no manual context teardown.
+- **Reduced motion = `speed={0}`.** A static frame, no rAF loop. The library
+  also handles DPR, resize and the WebGL context lifecycle for you.
+- **Stay subtle.** Mostly background tones with accent pops; wrap in a div with
+  reduced `opacity` + a bottom `mask-image` fade so hero text stays legible.
+- **Decorative.** `aria-hidden="true"` + `pointer-events: none`.
+
+If you ever drop the library, the old hand-rolled recipe (full-screen triangle +
+domain-warped fbm noise, smoothed `u_mouse` attractor, vignette/bottom-fade
+alpha, `--bg`/`--accent` uniforms re-read on theme change) still works — but
+remember to recreate the WebGL context on theme change (a `loseContext()` in
+cleanup makes the canvas un-reusable on re-init).
 
 ## 4. Performance budget
 
-- **Cap DPR at ~2**; resize via `ResizeObserver`.
-- **Pause the rAF loop** when the canvas is off-screen (`IntersectionObserver`)
-  and when the tab is hidden (`visibilitychange`). Never animate what isn't seen.
-- Keep shader loops small (≤5 fbm octaves); prefer GPU transforms (`transform`,
-  `opacity`) over layout-triggering properties.
-- Lazy-load heavy/below-the-fold media; keep the runtime dependency list tiny.
+- **Cap DPR at ~2** (libraries expose `maxPixelRatio`/`maxPixelCount`; set it).
+- **Pause animation off-screen** (`IntersectionObserver`) and when the tab is
+  hidden (`visibilitychange`). Never animate what isn't seen — check whether the
+  library pauses itself; if not, gate it.
+- Keep shader work cheap (≤5 fbm octaves if hand-rolling); prefer GPU transforms
+  (`transform`, `opacity`) over layout-triggering properties.
+- **Mind the bundle.** Prefer zero-/light-dependency effect libs (Paper Shaders,
+  OGL, React Bits) over pulling three.js for a flat background. Lazy-load
+  heavy/below-the-fold media and 3D scenes.
 - Always provide a **graceful fallback** if WebGL is unavailable (the ambient
   CSS glow alone should still look intentional).
 
 ## 5. Accessibility (non-negotiable)
 
 - **Respect `prefers-reduced-motion`:** zero out staggers/offsets, disable
-  parallax/tilt, and render shaders as a single static frame (no loop).
+  parallax/tilt, and render shaders as a single static frame (e.g. `speed={0}`,
+  no loop).
 - **Gate pointer effects** to fine pointers (`(pointer: fine)`) so touch and
   keyboard users are unaffected.
 - Maintain semantic landmarks, skip links, `aria-label`/`aria-labelledby`,
@@ -94,16 +135,33 @@ Recipe for an organic, interactive field:
 ## 6. Ship checklist
 
 - [ ] One clear focal centerpiece; rest is quiet.
-- [ ] All color/type/spacing from tokens — no literals.
+- [ ] Effect comes from a maintained library (or a deliberate raw-WebGL choice).
+- [ ] All color/type/spacing from tokens — no literals; shader colors are props.
 - [ ] One shared easing curve across all motion.
 - [ ] Reduced-motion path verified (static, no jank).
 - [ ] Pointer effects gated to fine pointers; touch/keyboard unaffected.
-- [ ] rAF paused off-screen and when tab hidden; DPR capped.
+- [ ] Animation paused off-screen and when tab hidden; DPR capped.
 - [ ] WebGL fallback looks intentional.
-- [ ] Works in light + dark themes; no theme flash.
+- [ ] Works in light + dark themes; theme switch re-colors the effect, no flash,
+      no broken/blank canvas after toggling.
 - [ ] Type-check / build is green; bundle stays lean.
 
 ## References
+
+Libraries & docs
+
+- [Paper Shaders — gallery + docs](https://shaders.paper.design/) ·
+  [GitHub](https://github.com/paper-design/shaders) ·
+  [React usage guide](https://mintlify.com/paper-design/shaders/guides/react-usage)
+- [React Bits — animated React components](https://reactbits.dev/) ·
+  [GitHub](https://github.com/DavidHDev/react-bits)
+- [Vanta.js — animated 3D backgrounds](https://www.vantajs.com/)
+- [GSAP (now fully free)](https://gsap.com/) · [ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/)
+- [Magic UI](https://magicui.design/) · [Aceternity UI](https://ui.aceternity.com/) · [shadcn shader components](https://www.shadcn.io/shaders)
+- [Spline](https://spline.design/) · [Unicorn Studio](https://www.unicorn.studio/)
+- [Three.js](https://threejs.org/) · [React Three Fiber](https://r3f.docs.pmnd.rs/) · [OGL](https://github.com/oframe/ogl)
+
+Inspiration & technique
 
 - [Awwwards — Interactive WebGL Hero (Matt Bierman portfolio)](https://www.awwwards.com/inspiration/interactive-webgl-hero-matt-bierman-portfolio)
 - [Awwwards — Cyd Stumpel Portfolio 2025 (SOTD)](https://www.awwwards.com/sites/cyd-stumpel-portfolio-2025)
