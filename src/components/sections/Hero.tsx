@@ -1,17 +1,55 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
 import { profile } from '../../data/profile';
 import { MagneticButton } from '../ui/MagneticButton';
+import { ShaderBackground } from '../ui/ShaderBackground';
 import { ArrowIcon } from '../ui/icons';
-import { usePrefersReducedMotion } from '../../hooks/useMediaQuery';
+import {
+  usePrefersReducedMotion,
+  useMediaQuery,
+} from '../../hooks/useMediaQuery';
 import styles from './Hero.module.css';
 
 export function Hero() {
   const reduced = usePrefersReducedMotion();
+  const finePointer = useMediaQuery('(pointer: fine)');
+  const tiltEnabled = !reduced && finePointer;
   const words = profile.name.split(' ');
+
+  // Cursor-driven 3D tilt of the name block (desktop + motion-on only).
+  const nameRef = useRef<HTMLHeadingElement>(null);
+  const px = useMotionValue(0);
+  const py = useMotionValue(0);
+  const rotX = useSpring(useTransform(py, [-0.5, 0.5], [6, -6]), {
+    stiffness: 150,
+    damping: 20,
+  });
+  const rotY = useSpring(useTransform(px, [-0.5, 0.5], [-8, 8]), {
+    stiffness: 150,
+    damping: 20,
+  });
+
+  const handleTilt = (e: React.MouseEvent) => {
+    if (!tiltEnabled || !nameRef.current) return;
+    const rect = nameRef.current.getBoundingClientRect();
+    px.set((e.clientX - (rect.left + rect.width / 2)) / rect.width);
+    py.set((e.clientY - (rect.top + rect.height / 2)) / rect.height);
+  };
+  const resetTilt = () => {
+    px.set(0);
+    py.set(0);
+  };
 
   const container = {
     hidden: {},
-    visible: { transition: { staggerChildren: reduced ? 0 : 0.08, delayChildren: 0.1 } },
+    visible: {
+      transition: { staggerChildren: reduced ? 0 : 0.08, delayChildren: 0.1 },
+    },
   };
   const item = {
     hidden: { opacity: 0, y: reduced ? 0 : '0.6em' },
@@ -24,6 +62,8 @@ export function Hero() {
 
   return (
     <section id="top" className={styles.hero} aria-label="Вступление">
+      <ShaderBackground />
+
       <div className={`container ${styles.inner}`}>
         <motion.p
           className={`mono ${styles.eyebrow}`}
@@ -36,10 +76,18 @@ export function Hero() {
         </motion.p>
 
         <motion.h1
+          ref={nameRef}
           className={styles.name}
           variants={container}
           initial="hidden"
           animate="visible"
+          onMouseMove={handleTilt}
+          onMouseLeave={resetTilt}
+          style={
+            tiltEnabled
+              ? { rotateX: rotX, rotateY: rotY, transformPerspective: 900 }
+              : undefined
+          }
         >
           {words.map((word, i) => (
             <span key={i} className={styles.wordMask}>

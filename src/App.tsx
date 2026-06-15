@@ -3,6 +3,7 @@ import { Nav } from './components/layout/Nav';
 import { Footer } from './components/layout/Footer';
 import { Grain } from './components/ui/Grain';
 import { Cursor } from './components/ui/Cursor';
+import { ScrollProgress } from './components/ui/ScrollProgress';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
@@ -18,6 +19,7 @@ export default function App() {
       </a>
       <Grain />
       <Cursor />
+      <ScrollProgress />
       <Nav />
       <main id="main">
         <Hero />
