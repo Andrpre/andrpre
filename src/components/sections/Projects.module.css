@@ -1,50 +1,65 @@
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-  gap: var(--space-6);
+  display: flex;
+  flex-direction: column;
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-6);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--surface) 55%, transparent);
-  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease),
-    box-shadow 0.35s var(--ease);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto auto;
+  column-gap: var(--space-8);
+  row-gap: var(--space-3);
+  padding-block: var(--space-8);
+  border-top: 1px solid var(--border);
+  transition: border-color 0.35s var(--ease);
+  text-decoration: none;
+  color: inherit;
+}
+.card:last-child {
+  border-bottom: 1px solid var(--border);
 }
 .card:hover {
-  transform: translateY(-5px);
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
-  box-shadow: 0 18px 40px -24px var(--shadow);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.card:hover .title {
+  color: var(--accent);
 }
 
 .cardTop {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: var(--space-3);
 }
 
 .year {
   color: var(--text-muted);
+  font-size: var(--step--1);
 }
 
 .links {
+  grid-column: 2 / 3;
+  grid-row: 1 / 4;
   display: flex;
+  flex-direction: column;
   gap: var(--space-2);
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding-top: var(--space-1);
 }
 
 .iconLink {
   display: inline-grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-sm);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   border: 1px solid var(--border);
   color: var(--text-muted);
-  transition: color 0.25s var(--ease), border-color 0.25s var(--ease),
+  transition:
+    color 0.25s var(--ease),
+    border-color 0.25s var(--ease),
     transform 0.25s var(--ease);
 }
 .iconLink:hover {
@@ -54,23 +69,50 @@
 }
 
 .title {
-  font-size: var(--step-1);
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  font-size: var(--step-2);
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  transition: color 0.3s var(--ease);
 }
 
 .desc {
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
   color: var(--text-muted);
-  flex: 1;
+  max-width: 60ch;
+  line-height: 1.6;
 }
 
 .tags {
+  grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin-top: var(--space-2);
+  margin-top: var(--space-1);
 }
 .tag {
   padding: 2px var(--space-3);
   border-radius: var(--radius-pill);
   background: var(--accent-soft);
   color: var(--accent);
+  font-size: var(--step--1);
+}
+
+@media (max-width: 600px) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+  .links {
+    grid-column: 1;
+    grid-row: auto;
+    flex-direction: row;
+    justify-content: flex-start;
+    order: 4;
+  }
+  .title {
+    font-size: var(--step-1);
+  }
 }

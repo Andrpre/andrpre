@@ -13,11 +13,25 @@
 .index {
   color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
 }
 
 .title {
-  font-size: var(--step-2);
+  font-size: var(--step-3);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+/* Animated underline bar */
+.title::after {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  background: var(--accent);
+  margin-top: var(--space-4);
+  border-radius: 2px;
 }
 
 @media (max-width: 640px) {
