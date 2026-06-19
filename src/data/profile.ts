@@ -1,26 +1,22 @@
 import type { Profile } from './types';
 
-// Замени значения-заглушки на свои реальные данные.
 export const profile: Profile = {
   name: 'Андрей Кожухов',
   nameLatin: 'Andrey Kozhukhov',
-  role: 'Frontend Developer',
+  role: 'Frontend Developer · React / TypeScript',
   level: 'Middle',
   tagline:
-    'Frontend-разработчик с опытом управления проектами в сфере веб-разработки.',
+    'Middle Frontend Developer с 3+ годами коммерческого опыта разработки продуктов в сферах CRM и e-commerce.',
   bio: [
-    'Начинал как junior, сегодня — уверенный middle-разработчик. За плечами путь от управления контентом и проектами в e-commerce до самостоятельной разработки продуктовых интерфейсов.',
-    'Делаю быстрые, доступные и продуманные интерфейсы на React и TypeScript. Ценю чистый код, внимание к деталям и хороший пользовательский опыт.',
+    'Специализируюсь на приложениях на React и TypeScript: проектирую пользовательские интерфейсы, занимаюсь производительностью и развитием внутренних платформ.',
+    'Работал над высоконагруженными продуктами с десятками тысяч пользователей — участвовал в проектировании архитектуры, разработке новых продуктовых модулей и оптимизации существующих решений.',
   ],
-  location: 'Россия',
-  email: 'andkozhykhov@team.amocrm.com',
+  location: 'Москва',
+  email: 'and.kozhuhov@mail.ru',
   resumeUrl: undefined, // положи resume.pdf в /public и укажи: `${import.meta.env.BASE_URL}resume.pdf`
   socials: [
     { label: 'GitHub', href: 'https://github.com/Andrpre', icon: 'github' },
-    // PLACEHOLDER — замени на свой ник в Telegram
-    { label: 'Telegram', href: 'https://t.me/andrpre', icon: 'telegram' },
-    // PLACEHOLDER — замени на свой профиль LinkedIn
-    { label: 'LinkedIn', href: 'https://linkedin.com/in/andrpre', icon: 'linkedin' },
-    { label: 'Email', href: 'mailto:andkozhykhov@team.amocrm.com', icon: 'email' },
+    { label: 'Telegram', href: 'https://t.me/ray_nder', icon: 'telegram' },
+    { label: 'Email', href: 'mailto:and.kozhuhov@mail.ru', icon: 'email' },
   ],
 };

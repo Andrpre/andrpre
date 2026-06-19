@@ -11,15 +11,8 @@ body {
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.5;
-  /* prevent scroll on desktop — everything lives in one screen */
-  overflow: hidden;
-}
-
-@media (max-width: 920px) {
-  body {
-    /* allow scrolling where one screen is too tight (mobile/tablet) */
-    overflow: auto;
-  }
+  /* one screen by design, but scroll if the content doesn't fit */
+  overflow-y: auto;
 }
 
 ::selection {

@@ -31,11 +31,28 @@ export function TelegramIcon(props: IconProps) {
   );
 }
 
+export function MailIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
+      <path d="m3 6.5 9 6 9-6" />
+    </svg>
+  );
+}
+
 export function ArrowIcon(props: IconProps) {
   return (
     <svg {...base} {...props}>
       <path d="M7 17 17 7" />
       <path d="M7 7h10v10" />
+    </svg>
+  );
+}
+
+export function ChevronIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m6 9 6 6 6-6" />
     </svg>
   );
 }

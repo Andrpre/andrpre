@@ -1,17 +1,27 @@
+import { useState } from 'react';
+import type { ComponentType, SVGProps } from 'react';
 import { profile } from './data/profile';
 import { experience } from './data/experience';
 import { projects } from './data/projects';
 import { skillGroups } from './data/skills';
-import { GithubIcon, TelegramIcon, ArrowIcon } from './components/icons';
+import type { SocialIcon } from './data/types';
+import {
+  GithubIcon,
+  TelegramIcon,
+  MailIcon,
+  ArrowIcon,
+  ChevronIcon,
+} from './components/icons';
 import styles from './App.module.css';
+
+const socialIcons: Record<SocialIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
+  github: GithubIcon,
+  telegram: TelegramIcon,
+  email: MailIcon,
+};
 
 const [firstName, ...rest] = profile.nameLatin.split(' ');
 const lastName = rest.join(' ');
-
-// Footer socials: GitHub + Telegram only (per design).
-const footerSocials = profile.socials.filter(
-  (s) => s.icon === 'github' || s.icon === 'telegram',
-);
 
 // Two projects as a compact secondary block.
 const featured = projects.slice(0, 2);
@@ -19,7 +29,13 @@ const featured = projects.slice(0, 2);
 // Flatten skill groups into a single de-duplicated tag list.
 const techStack = Array.from(new Set(skillGroups.flatMap((g) => g.items)));
 
+// Telegram link for the header CTA, sourced from socials so it stays in sync.
+const telegram = profile.socials.find((s) => s.icon === 'telegram');
+
 export default function App() {
+  // Accordion: the most recent job (index 0) is open by default; only one open at a time.
+  const [openExp, setOpenExp] = useState(0);
+
   return (
     <main className={styles.page}>
       <header className={styles.top}>
@@ -28,7 +44,12 @@ export default function App() {
           {lastName[0]}
           <span className={styles.logoMark} aria-hidden="true" />
         </a>
-        <a className={styles.topLink} href={`mailto:${profile.email}`}>
+        <a
+          className={styles.topLink}
+          href={telegram?.href ?? `mailto:${profile.email}`}
+          target="_blank"
+          rel="noreferrer"
+        >
           Написать <ArrowIcon width={14} height={14} />
         </a>
       </header>
@@ -53,37 +74,69 @@ export default function App() {
         <aside className={styles.right}>
           <section className={styles.block}>
             <h2 className={styles.blockTitle}>Опыт работы</h2>
-            <ol className={styles.expList}>
-              {experience.map((item, i) => (
-                <li key={item.company + item.period} className={styles.expItem}>
-                  <span className={styles.expNum}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <span className={styles.expMain}>
-                    <span className={styles.expCompany}>{item.company}</span>
-                    <span className={styles.expRole}>{item.role}</span>
-                  </span>
-                  <span className={styles.expPeriod}>{item.period}</span>
-                </li>
-              ))}
-            </ol>
+            <ul className={styles.expList}>
+              {experience.map((item, i) => {
+                const isOpen = openExp === i;
+                const panelId = `exp-panel-${i}`;
+                return (
+                  <li
+                    key={item.company + item.period}
+                    className={styles.expItem}
+                  >
+                    <button
+                      type="button"
+                      className={styles.expHead}
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => setOpenExp(i)}
+                    >
+                      <span className={styles.expMain}>
+                        <span className={styles.expCompany}>{item.company}</span>
+                        <span className={styles.expRole}>{item.role}</span>
+                      </span>
+                      <span className={styles.expPeriod}>{item.period}</span>
+                      <ChevronIcon
+                        className={styles.expChevron}
+                        width={16}
+                        height={16}
+                      />
+                    </button>
+                    <div
+                      id={panelId}
+                      role="region"
+                      className={styles.expPanel}
+                      data-open={isOpen}
+                    >
+                      <div className={styles.expPanelInner}>
+                        <p className={styles.expDesc}>{item.description}</p>
+                        {item.highlights && item.highlights.length > 0 && (
+                          <ul className={styles.expHighlights}>
+                            {item.highlights.map((h) => (
+                              <li key={h}>{h}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </section>
 
           <section className={styles.block}>
             <h2 className={styles.blockTitle}>Проекты</h2>
-            <ul className={styles.projList}>
-              {featured.map((p) => {
-                const href =
-                  p.liveUrl && p.liveUrl !== '#' ? p.liveUrl : p.repoUrl;
-                const Tag = href ? 'a' : 'span';
+            <ol className={styles.projList}>
+              {featured.map((p, i) => {
+                const href = p.liveUrl && p.liveUrl !== "#" ? p.liveUrl : p.repoUrl;
+                const Tag = href ? "a" : "span";
                 return (
                   <li key={p.title}>
                     <Tag
                       className={styles.projItem}
-                      {...(href
-                        ? { href, target: '_blank', rel: 'noreferrer' }
-                        : {})}
+                      {...(href ? { href, target: "_blank", rel: "noreferrer" } : {})}
                     >
+                      <span className={styles.projNum}>{String(i + 1).padStart(2, "0")}</span>
                       <span className={styles.projTitle}>{p.title}</span>
                       <span className={styles.projMeta}>
                         {p.tags[0]}
@@ -93,7 +146,7 @@ export default function App() {
                   </li>
                 );
               })}
-            </ul>
+            </ol>
           </section>
 
           <section className={styles.block}>
@@ -108,18 +161,21 @@ export default function App() {
           </section>
 
           <nav className={styles.socials} aria-label="Контакты">
-            {footerSocials.map((s) => (
-              <a
-                key={s.icon}
-                className={styles.social}
-                href={s.href}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {s.icon === 'github' ? <GithubIcon /> : <TelegramIcon />}
-                {s.label}
-              </a>
-            ))}
+            {profile.socials.map((s) => {
+              const Icon = socialIcons[s.icon];
+              const isMail = s.href.startsWith("mailto:");
+              return (
+                <a
+                  key={s.icon}
+                  className={styles.social}
+                  href={s.href}
+                  {...(isMail ? {} : { target: "_blank", rel: "noreferrer" })}
+                >
+                  <Icon />
+                  {s.label}
+                </a>
+              );
+            })}
           </nav>
         </aside>
       </div>
