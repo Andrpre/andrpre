@@ -33,8 +33,14 @@ const techStack = Array.from(new Set(skillGroups.flatMap((g) => g.items)));
 const telegram = profile.socials.find((s) => s.icon === 'telegram');
 
 export default function App() {
-  // Accordion: the most recent job (index 0) is open by default; only one open at a time.
-  const [openExp, setOpenExp] = useState(0);
+  // Experience items expand/collapse independently; all collapsed by default.
+  const [openExp, setOpenExp] = useState<Set<number>>(new Set());
+  const toggleExp = (i: number) =>
+    setOpenExp((prev) => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
 
   return (
     <main className={styles.page}>
@@ -76,7 +82,7 @@ export default function App() {
             <h2 className={styles.blockTitle}>Опыт работы</h2>
             <ul className={styles.expList}>
               {experience.map((item, i) => {
-                const isOpen = openExp === i;
+                const isOpen = openExp.has(i);
                 const panelId = `exp-panel-${i}`;
                 return (
                   <li
@@ -88,7 +94,7 @@ export default function App() {
                       className={styles.expHead}
                       aria-expanded={isOpen}
                       aria-controls={panelId}
-                      onClick={() => setOpenExp(i)}
+                      onClick={() => toggleExp(i)}
                     >
                       <span className={styles.expMain}>
                         <span className={styles.expCompany}>{item.company}</span>
