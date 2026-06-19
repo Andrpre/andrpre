@@ -1,68 +1,27 @@
-/* Design tokens — single source of truth for color, type and spacing.
-   Dark theme is the default; light theme overrides via [data-theme="light"]. */
-
+/* Dark-only design tokens — monochrome minimalism */
 :root {
-  /* ---- color: dark (default) ---- */
-  --bg: #0b0b0d;
-  --bg-elevated: #141417;
-  --surface: #16161a;
-  --text: #f2f2f0;
-  --text-muted: #9a9aa0;
-  --border: #26262b;
-  --accent: #e4b363;
-  --accent-soft: rgba(228, 179, 99, 0.14);
-  --accent-contrast: #0b0b0d;
-  --glow: rgba(228, 179, 99, 0.16);
-  --shadow: rgba(0, 0, 0, 0.45);
+  /* Surfaces */
+  --bg: #08090a;
+  --bg-soft: #0e1011;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.16);
 
-  color-scheme: dark;
+  /* Text */
+  --fg: #f4f4f5;
+  --fg-dim: #9b9ba1;
+  --fg-faint: #5e5f66;
 
-  /* ---- typography ---- */
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Accent */
+  --accent: #f4f4f5;
+  --live: #4ade80;
+
+  /* Type */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', var(--font-sans);
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-  /* fluid type scale */
-  --step--1: clamp(0.83rem, 0.8rem + 0.15vw, 0.9rem);
-  --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-  --step-1: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
-  --step-2: clamp(1.6rem, 1.3rem + 1.2vw, 2.25rem);
-  --step-3: clamp(2.2rem, 1.6rem + 2.6vw, 3.75rem);
-  --step-4: clamp(2.8rem, 1.9rem + 4vw, 5.5rem);
-
-  /* ---- spacing (8px base) ---- */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-24: 6rem;
-  --space-32: 8rem;
-
-  /* ---- shape & motion ---- */
-  --radius: 14px;
-  --radius-sm: 8px;
-  --radius-pill: 999px;
-  --container: 72rem;
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --dur: 0.5s;
-}
-
-:root[data-theme='light'] {
-  --bg: #f7f6f3;
-  --bg-elevated: #ffffff;
-  --surface: #ffffff;
-  --text: #16161a;
-  --text-muted: #5b5b63;
-  --border: #e4e2dc;
-  --accent: #b07d2b;
-  --accent-soft: rgba(176, 125, 43, 0.12);
-  --accent-contrast: #ffffff;
-  --glow: rgba(176, 125, 43, 0.12);
-  --shadow: rgba(20, 20, 25, 0.12);
-
-  color-scheme: light;
+  /* Layout */
+  --pad-x: clamp(20px, 4.2vw, 64px);
+  --pad-y: clamp(20px, 3.4vh, 44px);
+  --radius: 10px;
 }
