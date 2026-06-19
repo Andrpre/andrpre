@@ -1,32 +1,27 @@
 import type { Project } from './types';
 
-// Заглушки — замени на свои реальные проекты (можно убрать liveUrl/repoUrl, если их нет).
 export const projects: Project[] = [
   {
-    title: 'Dashboard Analytics',
+    title: 'Биллинговый раздел amoCRM',
     description:
-      'Панель аналитики с интерактивными графиками, фильтрами и тёмной темой. Состояние на Redux Toolkit, данные через RTK Query.',
-    tags: ['React', 'TypeScript', 'Redux Toolkit', 'Charts'],
-    liveUrl: '#',
-    repoUrl: 'https://github.com/Andrpre',
-    year: '2024',
+      'Раздел управления подпиской и оплатой в CRM-платформе, спроектированный и реализованный с нуля: страница управления подпиской, модальное окно оплаты, калькуляция тарифов и интеграция с тремя платёжными системами.',
+    tags: ['React', 'TypeScript', 'Next.js', 'TanStack Query'],
+    year: '2025',
   },
   {
-    title: 'UI Component Library',
+    title: 'Модуль AI Agent (amoCRM)',
     description:
-      'Переиспользуемая библиотека доступных компонентов с документацией и единой дизайн-системой на CSS-переменных.',
-    tags: ['React', 'TypeScript', 'CSS Modules', 'a11y'],
-    repoUrl: 'https://github.com/Andrpre',
-    year: '2024',
+      'Участие в проектировании frontend-архитектуры продуктового модуля AI Agent, согласование контрактов между frontend- и backend-командами и развитие внутренней библиотеки UI-компонентов.',
+    tags: ['React', 'TypeScript', 'FSD', 'Tailwind CSS'],
+    year: '2025',
   },
   {
-    title: 'E-commerce Storefront',
+    title: 'Интернет-магазин «Старая ферма»',
     description:
-      'Витрина интернет-магазина: каталог, корзина и оформление заказа с валидируемыми формами и интеграцией REST API.',
-    tags: ['React', 'React Hook Form', 'SASS', 'REST'],
-    liveUrl: '#',
-    repoUrl: 'https://github.com/Andrpre',
-    year: '2023',
+      'Интернет-магазин полного цикла: каталог, корзина, оформление заказа, доставка через пункты выдачи с интеграцией Яндекс Карт, личный кабинет и административная панель.',
+    tags: ['React', 'TypeScript', 'Redux Toolkit', 'Vite'],
+    liveUrl: 'https://www.dogeat.ru',
+    year: '2024',
   },
   {
     title: 'Portfolio Site',
