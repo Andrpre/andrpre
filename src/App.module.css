@@ -1,7 +1,7 @@
 /* ───────────────────────── Shell ───────────────────────── */
 .page {
   box-sizing: border-box;
-  height: 100svh;
+  min-height: 100svh;
   max-width: 1600px;
   margin-inline: auto;
   padding: var(--pad-y) var(--pad-x);
@@ -84,16 +84,16 @@
 
 .role {
   margin-top: clamp(18px, 3vh, 34px);
-  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
-  color: var(--fg-dim);
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  color: var(--fg);
 }
 
 .tagline {
   margin-top: 14px;
   max-width: 34ch;
-  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
   line-height: 1.4;
-  color: var(--fg);
+  color: var(--fg-dim);
 }
 
 .status {
@@ -133,26 +133,42 @@
   margin-bottom: 12px;
 }
 
-/* Experience */
+/* Experience — accordion */
 .expList {
   display: flex;
   flex-direction: column;
 }
 .expItem {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: baseline;
-  gap: 14px;
-  padding: clamp(9px, 1.4vh, 14px) 0;
   border-top: 1px solid var(--line);
 }
 .expItem:last-child {
   border-bottom: 1px solid var(--line);
 }
-.expNum {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+.expHead {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: clamp(9px, 1.4vh, 14px) 0;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+.expChevron {
+  flex-shrink: 0;
   color: var(--fg-faint);
+  transition: transform 0.3s ease, color 0.25s ease;
+}
+.expHead[aria-expanded="true"] .expChevron {
+  transform: rotate(180deg);
+  color: var(--fg-dim);
+}
+.expHead[aria-expanded="false"]:hover .expChevron {
+  color: var(--fg-dim);
 }
 .expMain {
   display: flex;
@@ -164,6 +180,10 @@
   font-weight: 500;
   font-size: 0.98rem;
   color: var(--fg);
+  transition: color 0.25s ease;
+}
+.expHead[aria-expanded="false"]:hover .expCompany {
+  color: var(--fg-dim);
 }
 .expRole {
   font-size: 0.8rem;
@@ -176,6 +196,46 @@
   color: var(--fg-faint);
   white-space: nowrap;
 }
+.expPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.expPanel[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.expPanelInner {
+  overflow: hidden;
+}
+.expDesc {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--fg-dim);
+}
+.expHighlights {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding-bottom: clamp(10px, 1.6vh, 16px);
+  max-width: 50ch;
+}
+.expHighlights li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--fg-dim);
+}
+.expHighlights li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 5px;
+  height: 1px;
+  background: var(--fg-faint);
+}
 
 /* Projects */
 .projList {
@@ -183,9 +243,9 @@
   flex-direction: column;
 }
 .projItem {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: baseline;
-  justify-content: space-between;
   gap: 14px;
   padding: clamp(8px, 1.2vh, 12px) 0;
   border-top: 1px solid var(--line);
@@ -196,6 +256,11 @@
 }
 a.projItem:hover {
   padding-left: 8px;
+}
+.projNum {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--fg-faint);
 }
 .projTitle {
   font-weight: 500;
@@ -223,11 +288,6 @@ a.projItem:hover {
   border-radius: 999px;
   font-size: 0.76rem;
   color: var(--fg-dim);
-  transition: border-color 0.25s ease, color 0.25s ease;
-}
-.tag:hover {
-  border-color: var(--line-strong);
-  color: var(--fg);
 }
 
 /* Socials */
@@ -297,12 +357,3 @@ a.projItem:hover {
   }
 }
 
-@media (max-width: 460px) {
-  .expItem {
-    grid-template-columns: auto 1fr;
-  }
-  .expPeriod {
-    grid-column: 2;
-    justify-self: start;
-  }
-}

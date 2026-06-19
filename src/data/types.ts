@@ -1,4 +1,4 @@
-export type SocialIcon = 'github' | 'telegram' | 'linkedin' | 'email';
+export type SocialIcon = 'github' | 'telegram' | 'email';
 
 export interface SocialLink {
   label: string;
